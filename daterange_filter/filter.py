@@ -160,6 +160,8 @@ class DateRangeFilter(admin.filters.FieldListFilter):
         cl.params.pop(self.lookup_kwarg_upto, None)
         return ({
             'get_query': cl.params,
+            'query_string': cl.get_query_string({}, [self.lookup_kwarg_since, self.lookup_kwarg_upto]),
+
         }, )
 
     def expected_parameters(self):
@@ -199,7 +201,10 @@ class DateTimeRangeFilter(admin.filters.FieldListFilter):
         self.form = self.get_form(request)
 
     def choices(self, cl):
-        return []
+        return ({
+            'query_string': cl.get_query_string({}, [self.field_path]),
+        }, )
+
 
     def expected_parameters(self):
         return [self.lookup_kwarg_since_0, self.lookup_kwarg_since_1, self.lookup_kwarg_upto_0, self.lookup_kwarg_upto_1]
